@@ -2,7 +2,24 @@
 
 A **simple** customized 16 bit processor with minimum instruction set for education purposes
 
-With inspiration from the ARMv6-M Architecture Manual
+With instruction set inspiration from the ARMv6-M Architecture Manual
+
+## Development Schedule
+
+### Todos
+
+* [ ] RTL Diagram
+  * [ ] Top level RTL Diagram
+  * [ ] Supporting block diagram for each submodule
+* [ ] System Verilog Development
+* [ ] Unit Testing
+  * [ ] Software simulation and test for each submodule using modelsim
+  * [ ] Hardware simulation and test for each submodule on FPGA
+* [ ] Integration Testing
+  * [ ] Software simulation andd test using modelsim
+  * [ ] Hardware simulation and test using FPGA
+* [ ] CI/CD on GitHub?
+* [ ] Rearrange README as wiki
 
 ## Modules
 
@@ -25,7 +42,8 @@ With inspiration from the ARMv6-M Architecture Manual
   * Flash input
   * DIP Button input
     * Use DIP button to encode instruction and save in instruction register
-    * Old Atari style 
+    * Old Atari style
+  * Choose either to save instruction in flash (programming) or run the instruction immediately
 * **No** Interrupts or exception handler currently
 
 ## RTL Diagram
