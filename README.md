@@ -1,36 +1,70 @@
 # Zenomial
 
-A **simple** customized 16 bit processor with minimum instruction set for education purposes
+[![time tracker](https://wakatime.com/badge/github/William-An/Zenomial.svg)](https://wakatime.com/badge/github/William-An/Zenomial)
 
-With instruction set inspiration from the ARMv6-M Architecture Manual
+A **simple** opensourced customized 16-bit harvard architecture processor with minimum instruction set for education purposes with inspiration from the ARMv6-M Architecture.
+
+Implemented with Alinx A301 FPGA development board.
 
 ## Development Schedule
 
 ### Todos
 
-* [ ] RTL Diagram
+* [ ] RTL Diagram (Due Feb 24)
   * [ ] Top level RTL Diagram
   * [ ] Supporting block diagram for each submodule
 * [ ] System Verilog Development
+  * [ ] Add modules
 * [ ] Unit Testing
   * [ ] Software simulation and test for each submodule using modelsim
   * [ ] Hardware simulation and test for each submodule on FPGA
 * [ ] Integration Testing
-  * [ ] Software simulation andd test using modelsim
+  * [ ] Software simulation and test using modelsim
   * [ ] Hardware simulation and test using FPGA
 * [ ] CI/CD on GitHub?
 * [ ] Rearrange README as wiki
+* [ ] Programming
+  * [ ] Assembler development
+* [ ] Peripherals Development
+* [ ] Flexible design?
+* [ ] Von Neumann Architecture?
 
-## Modules
+## Core Modules
 
 * ALU
-* Memory
-* Instruction register
-  * hold the current instructions
-* Register groups (16)
+* Memory Controller / Bus
+  * Instruction Mem
+  * Data Mem
+* General Register groups (8)
 * FSM Controller
-  * Control the instruction fetch-execute cycle
+  * Control the instruction fetch-decode-execute cycle
+  * Special registers
+    * Intruction register
+      * hold the current instructions
+    * Program Counter (PC)
+      * Next instruction
+    * Stack pointer
+    * Link register
 * Clock
+
+## Executation Pipeline
+
+| First Clock | Second Clock  | Third Clock|
+|:-----------:|:-------------:|:----------:|
+| Fetch       | Fetch         | Fetch      |
+|             | Decode        | Decode     |
+|             |               | Execute    |
+
+## Peripherals
+
+* UART Port
+* AHB
+* APB
+* I2C
+* SPI
+* GPIO
+* Timers
+* BUS matrix to interact with peripherals
 
 ## Functionality
 
@@ -47,6 +81,10 @@ With instruction set inspiration from the ARMv6-M Architecture Manual
 * **No** Interrupts or exception handler currently
 
 ## RTL Diagram
+
+### TOP Level Design
+
+### Individual Block Diagram
 
 ## Instruction Set
 
