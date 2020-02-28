@@ -28,13 +28,18 @@ Implemented with Alinx A301 FPGA development board.
 * [ ] Peripherals Development
 * [ ] Flexible design?
 * [ ] Von Neumann Architecture?
+* [ ] More stages for pipeline
+  * [ ] Refer to RISC design
 
 ## Core Modules
 
 * ALU
 * Memory Controller / Bus
   * Instruction Mem
-  * Data Mem
+  * Data Mem (12 bits)
+  * Memory Space
+    * 16 bit address
+    * First 4 bits used to identify SOC devices
 * General Register groups (8)
 * FSM Controller
   * Control the instruction fetch-decode-execute cycle
@@ -84,7 +89,21 @@ Implemented with Alinx A301 FPGA development board.
 
 ### TOP Level Design
 
+![Top level architecutre](docs/images/Top.png)
+
 ### Individual Block Diagram
+
+#### ALU
+
+![ALU](/docs/images/ALU.png)
+
+#### General Register
+
+![General Register](docs/images/General_Reg.png)
+
+#### Controller
+
+![Controller](/docs/images/Controller.png)
 
 ## Instruction Set
 
