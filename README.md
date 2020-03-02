@@ -30,6 +30,7 @@ Implemented with Alinx A301 FPGA development board.
 * [ ] Von Neumann Architecture?
 * [ ] More stages for pipeline
   * [ ] Refer to RISC design
+  * [ ] Store and load multiple registers design
 
 ## Core Modules
 
@@ -107,11 +108,13 @@ Implemented with Alinx A301 FPGA development board.
 
 ## Instruction Set
 
+TODO: Finish ISA design
+
 Same mnemonic as the ARMv6-M Architecture
 
 ### Opcode Descrption
 
-|Opcode|xxxxxxxxxxxx|
+|Opcode|xxxxxxxxxxxxxx|
 
 * [00](#arithmetic-operation)
 * [01](#logic-operation)
@@ -120,17 +123,43 @@ Same mnemonic as the ARMv6-M Architecture
 
 ### Arithmetic Operation
 
-* Addition
-  * Adds immediate
-  * Adds register
-  * Adds with carry, register
-* Subtraction
-  * Subs immediate
-  * Subs register
-  * Subs carry register
-  * Reverse subs
-* Multiplication
-  * Mulipcation of two integer
+|00|Opcode|xxxxxxxxxx|
+
+* [000](#adds-immediate)
+* [001](#adds-register)
+* [010](#adds-with-carry-register)
+* [011](#subs-immediate)
+* [100](#subs-register)
+* [101](#subs-carry-register)
+* [110](#reverse-subs)
+* [111](#mulipcation-of-two-integer)
+
+#### Addition
+  
+##### Adds immediate
+
+Encoding T1
+|15|14|13|12|11|10 9 8|7 6 5 4 3 2 1 0|
+|- |- |- |- |- |:----:|:-------------:|
+|0 |0 |0 |0 |0 |  rd  |     imm8      |
+
+##### Adds register
+
+##### Adds with carry, register
+
+#### Subtraction
+
+##### Subs immediate
+
+##### Subs register
+
+##### Subs carry register
+
+##### Reverse subs
+
+#### Multiplication
+  
+##### Mulipcation of two integer
 
 ### Logic Operation
 
