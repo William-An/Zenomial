@@ -26,6 +26,9 @@ Implemented with Alinx A301 FPGA development board.
 * [ ] Programming
   * [ ] Assembler development
 * [ ] Peripherals Development
+  * [ ]  BUS/Interface
+  * [ ]  Comm protocols
+  * [ ]  Flexible design and IP core
 * [ ] Flexible design?
 * [ ] Von Neumann Architecture?
 * [ ] More stages for pipeline
@@ -64,8 +67,8 @@ Implemented with Alinx A301 FPGA development board.
 ## Peripherals
 
 * UART Port
-* AHB
-* APB
+* AHB BUS/Interface
+* APB BUS/Interface
 * I2C
 * SPI
 * GPIO
@@ -114,52 +117,176 @@ Same mnemonic as the ARMv6-M Architecture
 
 ### Opcode Descrption
 
-|Opcode|xxxxxxxxxxxxxx|
+|15 14 | 13 12 11 10 9 8 7 6 5 4 3 2 1 0 |
+|:----:|:-------------------------------:|
+|Opcode|         xxxxxxxxxxxxxx          |
 
-* [00](#arithmetic-operation)
-* [01](#logic-operation)
-* [10](#register-loading-and-memory-accessing)
-* [11](#branching--stack-operation)
+* [00](#arithmetic-operation) Arithmetic Operation
+* [01](#logic-operation) Logic Operation
+* [10](#register-loading-and-memory-accessing) Memory loading and storing
+* [11](#branching--stack-operation) Branch and Stack operation
 
 ### Arithmetic Operation
 
-|00|Opcode|xxxxxxxxxx|
+|15 14 | 13 12 11 | 10 9 8 7 6 5 4 3 2 1 0 |
+|:----:|:--------:|:----------------------:|
+|00    |  Opcode  |     xxxxxxxxxx         |
 
-* [000](#adds-immediate)
-* [001](#adds-register)
-* [010](#adds-with-carry-register)
-* [011](#subs-immediate)
-* [100](#subs-register)
-* [101](#subs-carry-register)
-* [110](#reverse-subs)
-* [111](#mulipcation-of-two-integer)
+* [000](#adds-immediate) Add immediate
+* [001](#adds-register) Add with register and specical register
+* [010](#adds-with-carry-register) Add register with carry
+* [011](#subs-immediate) Subtract immediate
+* [100](#subs-register) Subtract register and special register
+* [101](#subs-carry-register) Subtract register with carray
+* [110](#reverse-subs) Reverse subtract by immediate
+* [111](#mulipcation-of-two-integer) Multiply two registers
 
 #### Addition
   
 ##### Adds immediate
 
-Encoding T1
-|15|14|13|12|11|10 9 8|7 6 5 4 3 2 1 0|
-|- |- |- |- |- |:----:|:-------------:|
-|0 |0 |0 |0 |0 |  rd  |     imm8      |
+|15 14 13 12 11| 10 | 9 8 7 6 5 4 3 2 1 0 |
+|:------------:|:--:|---------------------|
+|   0 0 0 0 0  |Encoding Sel|xxxxxxxxxx|
 
-##### Adds register
+Encoding T1  
+`ADDS rd, rs, #imm4`
+|15|14|13|12|11|10| 9 8 7 6 | 5 4 3 | 2 1 0 |
+|- |- |- |- |- |- |:-------:|:-----:|:-----:|
+|0 |0 |0 |0 |0 |0 |  imm4   |  rs   |   rd  |
+
+Encoding T2  
+`ADDS rd, #imm7`
+|15|14|13|12|11|10 | 9 8 7 6 5 4 3 | 2 1 0 |
+|- |- |- |- |- |:-:|:-------------:|:-----:|
+|0 |0 |0 |0 |0 |1  |  imm7         |  rd   |
+
+##### Adds register and special register
+
+|15 14 13 12 11 | 10 9 | 8 7 6 5 4 3 2 1 0 |
+|:-------------:|:----:|:-----------------:|
+|  0 0 0 0 1    |Encoding Selection|xxxxxxxxxx|
+
+Encoding T1  
+`ADDS rd, rs, rn`
+|15|14|13|12|11|10|9 | 8 7 6 | 5 4 3 |2 1 0 |
+|- |- |- |- |- |- |- |:-----:|:-----:|:----:|
+|0 |0 |0 |0 |1 |0 |0 |  rn   |  rs   |  rd  |
+
+Encoding T2  
+`ADD sp, #imm9`
+|15|14|13|12|11|10|9 | 8 7 6 5 4 3 2 1 0 |
+|- |- |- |- |- |- |- |:-----------------:|
+|0 |0 |0 |0 |1 |0 |1 |        imm9       |
+
+Encoding T3  
+`ADD sp, rd`
+|15|14|13|12|11|10|9 | 8 7 6 5 4 3 |2 1 0 |
+|- |- |- |- |- |- |- |:-----------:|:----:|
+|0 |0 |0 |0 |1 |1 |0 |ignored      |  rd  |
 
 ##### Adds with carry, register
+
+|15 14 13 12 11 | 10 9 | 8 7 6 5 4 3 2 1 0 |
+|:-------------:|:----:|:-----------------:|
+|  0 0 0 1 0   |Reserved|xxxxxxxxxx|
+
+`ADCS rd, rs [, rn]`
+|15|14|13|12|11|10|9 | 8 7 6 | 5 4 3 |2 1 0 |
+|- |- |- |- |- |- |- |:-----:|:-----:|:----:|
+|0 |0 |0 |1 |0 |0 |0 |  rn   |  rs   |  rd  |
+
+if `rn` gets ignored, `rd` will be `rn`
 
 #### Subtraction
 
 ##### Subs immediate
 
-##### Subs register
+|15 14 13 12 11| 10 | 9 8 7 6 5 4 3 2 1 0 |
+|:------------:|:--:|---------------------|
+|0 0 0 1 1 |Encoding Sel|xxxxxxxxxx|
+
+Encoding T1  
+`SUBS rd, rs, #imm4`
+|15|14|13|12|11|10| 9 8 7 6 | 5 4 3 | 2 1 0 |
+|- |- |- |- |- |- |:-------:|:-----:|:-----:|
+|0 |0 |0 |1 |1 |0 |  imm4   |  rs   |   rd  |
+
+Encoding T2  
+`SUBS rd, #imm7`
+|15|14|13|12|11|10 | 9 8 7 6 5 4 3 | 2 1 0 |
+|- |- |- |- |- |:-:|:-------------:|:-----:|
+|0 |0 |0 |1 |1 |1  |  imm7         |  rd   |
+
+##### Subs register and special register
+
+|15 14 13 12 11 | 10 9 | 8 7 6 5 4 3 2 1 0 |
+|:-------------:|:----:|:-----------------:|
+|  0 0 1 0 0    |Encoding Selection|xxxxxxxxxx|
+
+Encoding T1  
+`SUBS rd, rs, rn`
+|15|14|13|12|11|10|9 | 8 7 6 | 5 4 3 |2 1 0 |
+|- |- |- |- |- |- |- |:-----:|:-----:|:----:|
+|0 |0 |1 |0 |0 |0 |0 |  rn   |  rs   |  rd  |
+
+Encoding T2  
+`SUB sp, #imm9`
+|15|14|13|12|11|10|9 | 8 7 6 5 4 3 2 1 0 |
+|- |- |- |- |- |- |- |:-----------------:|
+|0 |0 |1 |0 |0 |0 |1 |        imm9       |
+
+Encoding T3  
+`SUB sp, rd`
+|15|14|13|12|11|10|9 | 8 7 6 5 4 3 |2 1 0 |
+|- |- |- |- |- |- |- |:-----------:|:----:|
+|0 |0 |1 |0 |0 |1 |0 |ignored      |  rd  |
 
 ##### Subs carry register
 
+|15 14 13 12 11 | 10 9 | 8 7 6 5 4 3 2 1 0 |
+|:-------------:|:----:|:-----------------:|
+|  0 0 1 0 1    |Reserved|xxxxxxxxxx|
+
+`SDCS rd, rs [, rn]`
+|15|14|13|12|11|10|9 | 8 7 6 | 5 4 3 |2 1 0 |
+|- |- |- |- |- |- |- |:-----:|:-----:|:----:|
+|0 |0 |1 |0 |1 |0 |0 |  rn   |  rs   |  rd  |
+
+if `rn` gets ignored, `rd` will be `rn`
+
 ##### Reverse subs
+
+|15 14 13 12 11 | 10 9 | 8 7 6 5 4 3 2 1 0 |
+|:-------------:|:----:|:-----------------:|
+|  0 0 1 1 0    |Reserved|xxxxxxxxxx|
+
+`RSBS rd[,rs[, #imm5]]`
+|15|14|13|12|11|10 9 8 7 6 | 5 4 3 |2 1 0 |
+|- |- |- |- |- |:---------:|:-----:|:----:|
+|0 |0 |1 |1 |0 |    imm5   |  rs   |  rd  |
+
+`rd = rs - #imm`
+
+* If `rs` gets ignored, `rs` will be `rd`.
+* If `#imm5` gets ignored, `#0` will be supplied.
 
 #### Multiplication
   
 ##### Mulipcation of two integer
+
+|15 14 13 12 11 | 10 9 | 8 7 6 5 4 3 2 1 0 |
+|:-------------:|:----:|:-----------------:|
+|  0 0 1 1 1    |Reserved|xxxxxxxxxx|
+
+`MULS rd, rs[, rn]`
+|15|14|13|12|11|10|9 | 8 7 6 | 5 4 3 |2 1 0 |
+|- |- |- |- |- |- |- |:-----:|:-----:|:----:|
+|0 |0 |1 |1 |1 |0 |0 |  rn   |  rs   |  rd  |
+
+`rd = rs * rn`
+
+* If `rn` gets ignored, `rn` will be `rd` 
 
 ### Logic Operation
 
