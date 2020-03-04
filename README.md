@@ -133,17 +133,15 @@ Same mnemonic as the ARMv6-M Architecture
 |00    |  Opcode  |     xxxxxxxxxx         |
 
 * [000](#adds-immediate) Add immediate
-* [001](#adds-register) Add with register and specical register
+* [001](#adds-register-and-special-register) Add with register and specical register
 * [010](#adds-with-carry-register) Add register with carry
 * [011](#subs-immediate) Subtract immediate
-* [100](#subs-register) Subtract register and special register
+* [100](#subs-register-and-special-register) Subtract register and special register
 * [101](#subs-carry-register) Subtract register with carray
 * [110](#reverse-subs) Reverse subtract by immediate
 * [111](#mulipcation-of-two-integer) Multiply two registers
 
-#### Addition
-  
-##### Adds immediate
+#### Adds immediate
 
 |15 14 13 12 11| 10 | 9 8 7 6 5 4 3 2 1 0 |
 |:------------:|:--:|---------------------|
@@ -161,7 +159,7 @@ Encoding T2
 |- |- |- |- |- |:-:|:-------------:|:-----:|
 |0 |0 |0 |0 |0 |1  |  imm7         |  rd   |
 
-##### Adds register and special register
+#### Adds register and special register
 
 |15 14 13 12 11 | 10 9 | 8 7 6 5 4 3 2 1 0 |
 |:-------------:|:----:|:-----------------:|
@@ -185,7 +183,7 @@ Encoding T3
 |- |- |- |- |- |- |- |:-----------:|:----:|
 |0 |0 |0 |0 |1 |1 |0 |ignored      |  rd  |
 
-##### Adds with carry, register
+#### Adds with carry, register
 
 |15 14 13 12 11 | 10 9 | 8 7 6 5 4 3 2 1 0 |
 |:-------------:|:----:|:-----------------:|
@@ -198,9 +196,7 @@ Encoding T3
 
 if `rn` gets ignored, `rd` will be `rn`
 
-#### Subtraction
-
-##### Subs immediate
+#### Subs immediate
 
 |15 14 13 12 11| 10 | 9 8 7 6 5 4 3 2 1 0 |
 |:------------:|:--:|---------------------|
@@ -218,7 +214,7 @@ Encoding T2
 |- |- |- |- |- |:-:|:-------------:|:-----:|
 |0 |0 |0 |1 |1 |1  |  imm7         |  rd   |
 
-##### Subs register and special register
+#### Subs register and special register
 
 |15 14 13 12 11 | 10 9 | 8 7 6 5 4 3 2 1 0 |
 |:-------------:|:----:|:-----------------:|
@@ -242,7 +238,7 @@ Encoding T3
 |- |- |- |- |- |- |- |:-----------:|:----:|
 |0 |0 |1 |0 |0 |1 |0 |ignored      |  rd  |
 
-##### Subs carry register
+#### Subs carry register
 
 |15 14 13 12 11 | 10 9 | 8 7 6 5 4 3 2 1 0 |
 |:-------------:|:----:|:-----------------:|
@@ -255,7 +251,7 @@ Encoding T3
 
 if `rn` gets ignored, `rd` will be `rn`
 
-##### Reverse subs
+#### Reverse subs
 
 |15 14 13 12 11 | 10 9 | 8 7 6 5 4 3 2 1 0 |
 |:-------------:|:----:|:-----------------:|
@@ -271,9 +267,7 @@ if `rn` gets ignored, `rd` will be `rn`
 * If `rs` gets ignored, `rs` will be `rd`.
 * If `#imm5` gets ignored, `#0` will be supplied.
 
-#### Multiplication
-  
-##### Mulipcation of two integer
+#### Mulipcation register
 
 |15 14 13 12 11 | 10 9 | 8 7 6 5 4 3 2 1 0 |
 |:-------------:|:----:|:-----------------:|
@@ -286,29 +280,52 @@ if `rn` gets ignored, `rd` will be `rn`
 
 `rd = rs * rn`
 
-* If `rn` gets ignored, `rn` will be `rd` 
+* If `rn` gets ignored, `rn` will be `rd`
 
 ### Logic Operation
 
-* AND
-  * AND immediate?s
-  * AND register
-* OR
-  * OR immediate?
-  * OR register
-* NOT
-  * neg register
-* XOR
-  * eor register
-* BIC
-  * bics immediate?
-  * bics register
-* Shift
-  * Left shift
-  * Right shift
-    * Arithmetic shift
-    * Logic shift
-  * Rotate Right
+|15 14 | 13 12 11 10 | 9 8 7 6 5 4 3 2 1 0 |
+|:----:|:-----------:|:-------------------:|
+|01    |    Opcode   |     xxxxxxxxxx      |
+
+* [0000](#and-immediate) AND immediate
+* [0001](#and-register) AND with register
+* [0010](#or-immediate) OR immedate
+* [0011](#or-register) OR register
+* [0100](#neg-register) NEG register
+* [0101](#xor-register) XOR register
+* [0110](#bics-immediate) BICS immediate
+* [0111](#bics-register) BICS register
+* [1000](#left-logical-shift) Logical left shift register
+* [1001](#right-arithmetic-shift) Arithmetic right shift register
+* [1010](#right-logical-shift) Logical right shift register
+* [1011](#right-rotate-register) Rotate right register
+* Other opcodes reserved
+
+#### AND immediate
+
+#### AND register
+
+#### OR immediate
+
+#### OR register
+
+#### NEG register
+
+#### XOR register
+
+#### BICS immediate
+
+#### BICS register
+
+#### Left logical shift
+
+#### Right arithmetic shift
+
+#### Right Logical shift
+
+#### Right rotate register
+
 * ~~Extension?~~
   * Sign Extension
   * Unsigned Extension
